@@ -1,15 +1,13 @@
 
 import os, sys
 
-import threading
-
 import boto.s3.connection
 import boto.s3.key
 
 import logging
 logger = logging.getLogger(__name__)
 
-class S3Storage:
+class S3Client:
     def __init__(self, access_key_id, secret_access_key, host, port, secure=False, bucket_name=None):
         self.connection = boto.s3.connection.S3Connection(
                         aws_access_key_id=access_key_id,
