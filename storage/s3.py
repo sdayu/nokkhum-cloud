@@ -67,13 +67,16 @@ class S3Client:
         if bucket is None:
             return False
         
-        keys = bucket.get_all_keys(prefix=key_name)
-#        print "keys: ", keys
+        has_key = True
+        while has_key:
+            keys = bucket.get_all_keys(prefix=key_name)
+            
+            if len(keys) == 0:
+                break
+            
+            for key in keys:
+                key.delete()
 
-        for key in keys:
-            key.delete()
-
-#        bucket.delete_keys(keys)
             
         return True
     
