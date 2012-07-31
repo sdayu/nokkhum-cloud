@@ -3,7 +3,7 @@ Created on Jun 19, 2012
 
 @author: boatkrap
 '''
-
+import time
 import boto.ec2.connection
 from boto.ec2 import regioninfo
 
@@ -26,3 +26,45 @@ class EC2Client:
     
     def get_all_instances(self):
         return self.connection.get_all_instances()
+    
+    def get_image(self, image_id):
+        return self.connection.get_image(image_id)
+    
+    def start_instance(self, image_id):
+        image = self.connection.get_image(image_id)
+        reservation = image.run()
+        instance = reservation.instances[0]
+        instance.update()
+        if instance.state != u"running":
+            time.sleep(0.5)
+            instance.update()
+            
+        return instance
+    
+    def stop_instance(self, instance_id):
+        instance = self.find_instance(instance_id)
+        if instance:
+            instance.stop()
+            
+    def terminate_instance(self, instance_id):
+        instance = self.find_instance(instance_id)
+        if instance:
+            instance.terminate()
+            
+    def find_instance(self, instance_id):
+        reservations = self.connection.get_all_instances()
+        
+        found_instance = None
+        print reservations
+        found = False
+        for reservation in reservations:
+            for instance in reservation.instances:
+                if instance.id == instance_id:
+                    found_instance = instance
+                    found = True
+                    break
+            if found:
+                break
+            
+        return found_instance
+            
