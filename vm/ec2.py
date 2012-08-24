@@ -30,9 +30,9 @@ class EC2Client:
     def get_image(self, image_id):
         return self.connection.get_image(image_id)
     
-    def start_instance(self, image_id):
+    def start_instance(self, image_id, instance_type='m1.small'):
         image = self.connection.get_image(image_id)
-        reservation = image.run()
+        reservation = image.run(instance_type=instance_type)
         instance = reservation.instances[0]
         instance.update()
         if instance.state != u"running":
