@@ -1,1 +1,1 @@
-from vm import ec2
+from . import ec2
