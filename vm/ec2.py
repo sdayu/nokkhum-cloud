@@ -35,7 +35,7 @@ class EC2Client:
         reservation = image.run(instance_type=instance_type)
         instance = reservation.instances[0]
         instance.update()
-        if instance.state != u"running":
+        if instance.state != "running":
             time.sleep(0.5)
             instance.update()
             
