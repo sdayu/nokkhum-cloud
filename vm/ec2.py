@@ -55,7 +55,7 @@ class EC2Client:
         reservations = self.connection.get_all_instances()
         
         found_instance = None
-        print reservations
+        print (reservations)
         found = False
         for reservation in reservations:
             for instance in reservation.instances:
