@@ -22,10 +22,10 @@ class S3Client:
         self.set_buckket_name(bucket_name)
         
     def set_buckket_name(self, name):
-        if type(name) is int:
-            self.bucket_name = str(name)
-        elif type(name) is str:
+        if type(name) is str:
             self.bucket_name = name
+        else:
+            self.bucket_name = str(name)
             
     def list_file(self, prefix=""):
         bucket = self.connection.get_bucket(self.bucket_name)
