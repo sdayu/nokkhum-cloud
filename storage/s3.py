@@ -19,14 +19,22 @@ class S3Client:
                     )
         
         self.bucket_name = None
-        self.set_buckket_name(bucket_name)
+        self.set_bucket_name(bucket_name)
         
-    def set_buckket_name(self, name):
+    def set_bucket_name(self, name):
         if type(name) is str:
             self.bucket_name = name
         else:
             self.bucket_name = str(name)
-            
+    
+    def get_bucket(self, name=None):
+        if name is not None:
+            return self.connection.get_bucket(name)
+        elif self.bucket_name is not None:
+            return self.connection.get_bucket(self.bucket_name)
+        else:
+            return None
+    
     def list_file(self, prefix=""):
         bucket = self.connection.get_bucket(self.bucket_name)
         results = []
@@ -77,7 +85,6 @@ class S3Client:
             for key in keys:
                 key.delete()
 
-            
         return True
     
     def get_all_buckets(self):
