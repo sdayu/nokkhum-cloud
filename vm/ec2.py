@@ -45,6 +45,11 @@ class EC2Client:
         instance = self.find_instance(instance_id)
         if instance:
             instance.stop()
+    
+    def reboot_instance(self, instance_id):
+        instance = self.find_instance(instance_id)
+        if instance:
+            instance.reboot()
             
     def terminate_instance(self, instance_id):
         instance = self.find_instance(instance_id)
@@ -55,7 +60,6 @@ class EC2Client:
         reservations = self.connection.get_all_instances()
         
         found_instance = None
-        print (reservations)
         found = False
         for reservation in reservations:
             for instance in reservation.instances:
