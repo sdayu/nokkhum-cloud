@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 class S3Client:
-    def __init__(self, access_key_id, secret_access_key, host, port, secure=False,
+    def __init__(self, access_key_id, secret_access_key, host, port,
+                 secure=False,
                  bucket_name=None):
         self.connection = boto.s3.connection.S3Connection(
             aws_access_key_id=access_key_id,
@@ -33,12 +34,12 @@ class S3Client:
         if name is not None:
             return self.connection.get_bucket(name)
         elif self.bucket_name is not None:
-            results = None
+            bucket = None
             try:
-                self.connection.get_bucket(self.bucket_name)
+                bucket = self.connection.get_bucket(self.bucket_name)
             except Exception as e:
                 logger.exception(e)
-            return results
+            return bucket
         else:
             return None
 
