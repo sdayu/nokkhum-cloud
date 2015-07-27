@@ -20,16 +20,16 @@ class EC2Client:
             path=path,
             debug=2
         )
-        
+
     def get_all_images(self):
         return self.connection.get_all_images()
-    
+
     def get_all_instances(self):
         return self.connection.get_all_instances()
-    
+
     def get_image(self, image_id):
         return self.connection.get_image(image_id)
-    
+
     def start_instance(self, image_id, instance_type='m1.small'):
         image = self.connection.get_image(image_id)
         reservation = image.run(instance_type=instance_type)
@@ -38,27 +38,27 @@ class EC2Client:
         if instance.state != "running":
             time.sleep(0.5)
             instance.update()
-            
+
         return instance
-    
+
     def stop_instance(self, instance_id):
         instance = self.find_instance(instance_id)
         if instance:
             instance.stop()
-    
+
     def reboot_instance(self, instance_id):
         instance = self.find_instance(instance_id)
         if instance:
             instance.reboot()
-            
+
     def terminate_instance(self, instance_id):
         instance = self.find_instance(instance_id)
         if instance:
             instance.terminate()
-            
+
     def find_instance(self, instance_id):
-        reservations = self.connection.get_all_instances()
-        
+        reservations = self.connection.get_all_reservations()
+
         found_instance = None
         found = False
         for reservation in reservations:
@@ -69,6 +69,6 @@ class EC2Client:
                     break
             if found:
                 break
-            
+
         return found_instance
-            
+
