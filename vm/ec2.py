@@ -35,7 +35,7 @@ class EC2Client:
         reservation = image.run(instance_type=instance_type)
         instance = reservation.instances[0]
         instance.update()
-        if instance.state != "running":
+        if instance.state != 'running':
             time.sleep(0.5)
             instance.update()
 
@@ -48,8 +48,21 @@ class EC2Client:
 
     def reboot_instance(self, instance_id):
         instance = self.find_instance(instance_id)
-        if instance:
-            instance.reboot()
+        if instance is None:
+            return
+
+        if instance.state == 'stopped':
+            instance.start()
+        if instance.state == 'running':
+            try:
+                instance.reboot()
+            except:
+                instance.stop()
+                while(instance.state != 'stopped'):
+                    time.sleep(0.1)
+                    instance.update()
+
+                instance.start()
 
     def terminate_instance(self, instance_id):
         instance = self.find_instance(instance_id)
